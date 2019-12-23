@@ -1,0 +1,13 @@
+{
+  "name": "Sentry scraper",
+  "description": "Takes a Sentry Issue to make a GitHub issue",
+  "version": "1.2",
+  "background": {
+    "scripts": ["jquery.js", "background.js", "content.js"]
+  },
+  "permissions": ["tabs", "http://*/*", "https://*/*"],
+  "browser_action": {
+    "default_title": "Sentry scraper"
+  },
+  "manifest_version": 2
+}
