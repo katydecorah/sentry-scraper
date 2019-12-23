@@ -1,18 +1,21 @@
 // make sure jQuery is loaded
 if (jQuery) {
   // get all tags for the sentry issue
-  const tags = {};
-  jQuery('.ez9cevw0').each(function(i) {
-    const tag = $(this)
+  const tagsEl = $('#tags')
+    .next()
+    .find('li');
+  const tags = Object.keys(tagsEl).reduce((obj, el) => {
+    const tag = $(tagsEl[el])
       .children('span')
       .first()
       .text();
-    const tagValue = $(this)
+    const tagValue = $(tagsEl[el])
       .children('span')
       .last()
       .text();
-    tags[tag] = tagValue;
-  });
+    obj[tag] = tagValue;
+    return obj;
+  }, {});
   // get the user feedback message
   const m = $('#message')
     .next()
