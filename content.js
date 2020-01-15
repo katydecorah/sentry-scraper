@@ -29,10 +29,6 @@ if (jQuery) {
   $('textarea#description')
     .val(newdescription)
     .css({ overflow: 'scroll' });
-  // set title
-  $('input#title').val(
-    `Feedback for ${tags.url}${tags.section ? ` (${tags.section})` : ''}`
-  );
 } else {
   conosle.log('no jQuery');
 }
