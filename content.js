@@ -24,7 +24,7 @@ if (jQuery) {
   // get GitHub issue description
   const description = $('textarea#description').val();
   // assemble the GitHub issue
-  const newdescription = `${description}\n\n* page: ${tags.url}\n* site: ${tags.site}\n* section: ${tags.section}\n* helpful: ${tags.helpful}\n\n *This feedback was submitted by a user through the feedback widget.*`;
+  const newdescription = `${description}\n\n* page: ${tags.url}\n* site: ${tags.site}\n* section: ${tags.section}\n* helpful: ${tags.helpful}\n\n *This feedback was submitted by a user through the feedback widget. Please close if this issue is not actionable given the provided details.*`;
   // set description
   $('textarea#description')
     .val(newdescription)
