@@ -1,34 +1,61 @@
-// make sure jQuery is loaded
-if (jQuery) {
-  // get all tags for the sentry issue
-  const tagsEl = $('#tags')
-    .next()
-    .find('li');
-  const tags = Object.keys(tagsEl).reduce((obj, el) => {
-    const tag = $(tagsEl[el])
-      .children('span')
-      .first()
-      .text();
-    const tagValue = $(tagsEl[el])
-      .children('span')
-      .last()
-      .text();
-    obj[tag] = tagValue;
-    return obj;
-  }, {});
-  // get the user feedback message
-  const m = $('#message')
-    .next()
-    .children()
-    .text();
-  // get GitHub issue description
-  const description = $('textarea#description').val();
-  // assemble the GitHub issue
-  const newdescription = `${description}\n\n* page: ${tags.url}\n* site: ${tags.site}\n* section: ${tags.section}\n* helpful: ${tags.helpful}\n\n *This feedback was submitted by a user through the feedback widget. Please close if this issue is not actionable given the provided details.*`;
-  // set description
-  $('textarea#description')
-    .val(newdescription)
-    .css({ overflow: 'scroll' });
-} else {
-  conosle.log('no jQuery');
+"use strict";
+
+// get all tags for the sentry issue
+const tags = document
+  .getElementById("tags")
+  .nextElementSibling.querySelectorAll("li");
+const allowedTags = [
+  "browser",
+  "category",
+  "categoryType",
+  "device",
+  "os",
+  "referrer",
+  "site",
+  "section",
+  "url",
+];
+const textarea = document.getElementById("description");
+
+const meta = Object.keys(tags).reduce((meta, t) => {
+  const tagContainer = tags[t].querySelectorAll("span");
+  const tag = tagContainer[0].innerText;
+  const tagValue = tagContainer[tagContainer.length - 1].innerText;
+  if (tag && allowedTags.includes(tag) && tagValue)
+    meta += `- ${tag}: ${tagValue}\n`;
+  return meta;
+}, "");
+
+// Replace fenced code block with a quote
+function quoteMe(feedback) {
+  let isCodeBlock = false;
+  return feedback
+    .split("\n")
+    .reduce((arr, l) => {
+      if (l === "```" && isCodeBlock) {
+        isCodeBlock = false;
+        return arr;
+      }
+      if (isCodeBlock) {
+        arr.push(`> ${l}`);
+        return arr;
+      }
+      if (l === "```") {
+        isCodeBlock = true;
+        return arr;
+      }
+      arr.push(l);
+      return arr;
+    }, [])
+    .join("\n");
 }
+
+const description = textarea.value;
+
+// assemble the GitHub issue
+textarea.value = `${quoteMe(description)}
+
+${meta}
+
+*This feedback was submitted by a user through the Feedback component. If this issue is not actionable with the details provided, you may close it.*`;
+textarea.style.overflow = "scroll";
