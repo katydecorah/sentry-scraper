@@ -1,9 +1,7 @@
 "use strict";
 
 // get all tags for the sentry issue
-const tags = document
-  .getElementById("tags")
-  .nextElementSibling.querySelectorAll("li");
+const tags = document.getElementById("tags").nextElementSibling.querySelectorAll("li");
 const allowedTags = [
   "browser",
   "category",
